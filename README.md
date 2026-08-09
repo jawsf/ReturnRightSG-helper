@@ -1,6 +1,8 @@
-ReturnRight: Send new images by email
+ReturnRight: Claim refunds by email
 
-This repository contains a small utility that monitors a folder for new image files and sends them as attachments in a single email. It is intended to be used with a Gmail account (using an app password) but can be configured for any SMTP server.
+SG Return Right machines can output receipts to claim the refund for bottles and cans. If taking a picture and sending an email seemed too much effort for 10 cents, this hopes to simplify the process by scanning a folder for new image files and sending the images to a specified email address. The folder can, for example, be connected to cloud storage which is linked to your phone, so all that is required would be to upload the image to the cloud storage from your phone and run this utility.
+
+This repository contains a small utility that monitors a folder for new refund receipt image files and sends them as attachments in a single email. It is intended to be used with a Gmail account (using an app password) but can be configured for any SMTP server.
 
 Files
 - [send_new_images.sh](/home/jordanaw/Repos/returnright/send_new_images.sh) — Bash wrapper that sources environment variables (if present) and calls the Python sender.
