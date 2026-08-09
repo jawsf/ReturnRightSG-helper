@@ -20,6 +20,7 @@ Environment variables
 Provide sensitive settings in a local file next to the scripts: /home/jordanaw/Repos/returnright/send_env.sh
 Example contents (edit and uncomment values):
 
+```
 # export EMAIL_USER="yourgmail@gmail.com"
 # export EMAIL_PASS="your_gmail_app_password"
 # export SMTP_SERVER="smtp.gmail.com"
@@ -27,22 +28,26 @@ Example contents (edit and uncomment values):
 # export EMAIL_TO="hi@returnright.sg"
 # export MONITOR_DIR="/home/jordanaw/Nextcloud/returnright-db"
 # export ATTACHMENT_SIZE_LIMIT="25165824"  # size limit in bytes (default 24MB). When exceeded, attachments are split across multiple emails.
+```
 
-The script supports a --dry-run flag to simulate sending and DB updates without performing them:
+The script supports a `--dry-run` flag to simulate sending and DB updates without performing them:
 
+```
 python3 send_new_images.py --dry-run
+```
 
 This is useful for testing which images would be sent and how they are batched.
 
 Security notes
 - Use a Gmail app password (recommended) instead of your main account password. Create an app password in Google Account > Security > App passwords.
-- Set restricted file permissions on send_env.sh: chmod 600 send_env.sh
-- Add send_env.sh to your .gitignore (if using git) to avoid accidentally committing it:
-  echo "send_env.sh" >> .gitignore
+- Set restricted file permissions on send_env.sh: `chmod 600 send_env.sh`
+- Add send_env.sh to your .gitignore (if using git) to avoid accidentally committing it
 
 Make the wrapper executable
 
-chmod +x /home/jordanaw/Repos/returnright/send_new_images.sh
+```
+chmod +x send_new_images.sh
+```
 
 Basic usage
 
@@ -50,21 +55,29 @@ Basic usage
 2. Populate the monitored folder /home/jordanaw/Nextcloud/returnright-db with images and an optional email-content.txt file.
 3. Run the wrapper:
 
-/home/jordanaw/Repos/returnright/send_new_images.sh
+```
+./send_new_images.sh
+```
 
 Or run the Python script directly with overrides:
 
-python3 /home/jordanaw/Repos/returnright/send_new_images.py --monitor-dir /home/jordanaw/Nextcloud/returnright-db --to hi@returnright.sg
+```
+python3 send_new_images.py --monitor-dir /home/jordanaw/Nextcloud/returnright-db --to hi@returnright.sg
+```
 
 Scheduling with cron (example)
 
 Run every 5 minutes (edit crontab with crontab -e):
 
+```
 */5 * * * * EMAIL_USER=you@gmail.com EMAIL_PASS=app_password /home/jordanaw/Repos/returnright/send_new_images.sh >> /var/log/send_new_images.log 2>&1
+```
 
 Or source the env file inside the cron job and run the script:
 
+```
 */5 * * * * . /home/jordanaw/Repos/returnright/send_env.sh && /home/jordanaw/Repos/returnright/send_new_images.sh >> /var/log/send_new_images.log 2>&1
+```
 
 Systemd timer (optional)
 
@@ -74,7 +87,7 @@ Important behavior and limitations
 - The script records sent images in the monitor folder as .sent_images.json (filename and metadata). Images already recorded are not re-sent unless the file changes (mtime or size changes), in which case the image is considered new again.
 - Attachments are grouped into batches so each email's total attachments do not exceed ATTACHMENT_SIZE_LIMIT (default 24MB). If the total size of new images exceeds the limit they will be sent in multiple messages, each with its own subject annotated with part numbers when applicable.
 - If a single image file is larger than the configured size limit, it will be sent alone in its own email (a warning is emitted).
-- Use --dry-run to simulate sending and DB updates without performing them.
+- Use `--dry-run` to simulate sending and DB updates without performing them.
 
 Troubleshooting
 - SMTP authentication errors: verify EMAIL_USER and EMAIL_PASS (use an app password for Gmail). Check that your Google account allows SMTP (app passwords or appropriate security settings required).
