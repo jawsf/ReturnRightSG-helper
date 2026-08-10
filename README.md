@@ -1,4 +1,4 @@
-ReturnRight: Claim refunds by email
+ReturnRightSG-helper: Claim refunds by email
 
 SG Return Right machines can output receipts to claim the refund for bottles and cans. If taking a picture and sending an email seemed too much effort for 10 cents, this hopes to simplify the process by scanning a folder for new image files and sending the images to a specified email address. The folder can, for example, be connected to cloud storage which is linked to your phone, so all that is required would be to upload the image to the cloud storage from your phone and run this utility.
 
