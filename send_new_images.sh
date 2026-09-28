@@ -6,7 +6,17 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Resolve the real directory of this script, even when invoked via a symlink.
+# dirname of ${BASH_SOURCE[0]} alone returns the symlink's directory, which
+# breaks lookups for venv/, send_env.sh and send_new_images.py.
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  # If the symlink target was relative, resolve it relative to the symlink dir
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
 PY="python3"
 
 # If a local virtualenv exists at ./venv, activate it so the script uses the venv's Python and packages.
